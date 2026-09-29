@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Мой ЕГЭ — профильная математика 2027 · v5.7</title>
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--text:#18202a;--muted:#667085;--line:#e5e7eb;--accent:#315efb;--ok:#138a52;--bad:#c62828}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{background:#111827;color:#fff;padding:22px 16px}main{max-width:1050px;margin:auto;padding:16px}
+h1{margin:0 0 5px;font-size:25px}h2{margin-top:0}h3{margin-bottom:7px}.sub{opacity:.78}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.tab,button{border:0;border-radius:10px;padding:11px 14px;background:#e9edf7;color:#18202a;font-weight:650;cursor:pointer}.tab.active,button.primary{background:var(--accent);color:white}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin:12px 0;box-shadow:0 2px 10px #00000008}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}.pill{display:inline-block;padding:4px 8px;border-radius:999px;background:#eef2ff;color:#2945a8;font-size:13px}
+.answer{width:100%;padding:12px;border:1px solid #cfd5df;border-radius:10px;font-size:17px}.hidden{display:none}.muted{color:var(--muted)}.ok{color:var(--ok);font-weight:700}.bad{color:var(--bad);font-weight:700}
+pre{white-space:pre-wrap;background:#f7f8fa;padding:12px;border-radius:10px;overflow:auto}.formula{font-family:Georgia,serif;font-size:18px;background:#fafafa;border-left:4px solid #315efb;padding:9px 12px;margin:9px 0}
+table{width:100%;border-collapse:collapse}td,th{padding:8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.small{font-size:13px}.warn{background:#fff8e1;border-color:#f1d37a}.success{background:#ecfdf3;border-color:#a7e3c2}
+</style>
+</head>
+<body>
+<header><main>
+<h1>Мой ЕГЭ — профильная математика</h1>
+<div class="sub">Версия 5.7 · 117 вариантов заданий · экзаменационный режим · математический аудит пройден · проект КИМ ЕГЭ-2027 ФИПИ</div>
+</main></header>
+<main>
+<nav>
+<button class="tab active" data-page="home">Главная</button>
+<button class="tab" data-page="practice">Тренировка</button>
+<button class="tab" data-page="exam">Экзамен</button>
+<button class="tab" data-page="part2">Часть 2</button>
+<button class="tab" data-page="theory">Теория</button>
+<button class="tab" data-page="adaptive">Мои ошибки</button>
+<button class="tab" data-page="structure">Структура 2027</button>
+</nav>
+
+<section id="home">
+<div class="card warn"><b>Важно.</b> Документы ЕГЭ-2027 на 29.09.2026 имеют статус <b>проекта</b>. ФИПИ принимает предложения до 30.09.2026. Поэтому приложение помечает структуру как «проект 2027», а не как окончательную спецификацию.</div>
+<div class="grid">
+<div class="card"><h3>20</h3><div class="muted">заданий по проекту</div></div>
+<div class="card"><h3>13 + 7</h3><div class="muted">краткий + развёрнутый ответ</div></div>
+<div class="card"><h3>33</h3><div class="muted">максимум первичных баллов по проекту</div></div>
+<div class="card"><h3>235 мин</h3><div class="muted">время работы</div></div>
+</div>
+<div class="card">
+<h2>Что исправлено в v5</h2>
+<ul>
+<li>Нумерация переведена на проект ЕГЭ-2027: 1–13 и 14–20.</li>
+<li>Добавлены №6 — случайные величины, №13 — текстовые задачи, №17 — математическое моделирование.</li>
+<li>Убраны из соответствующих номеров старые типы №13–19 2026 года.</li>
+<li>Формулы в разделе теории снабжены условиями применимости.</li>
+<li>Генераторы используют только проверяемые школьные формулы и дополнительно проверяют собственные ответы.</li>
+</ul>
+</div>
+</section>
+
+
+<section id="adaptive" class="hidden">
+<div class="card"><h2>Мои ошибки и адаптивная тренировка</h2>
+<p class="muted">Результаты сохраняются только в браузере через localStorage.</p>
+<div id="adaptiveSummary"></div></div>
+<div class="card"><h3>Тренировать слабую тему</h3>
+<div class="grid"><select id="weakTopic" class="answer"></select><button class="primary" onclick="adaptiveTask()">Дать новое задание</button></div>
+</div>
+<div class="card"><h3>Последние ошибки</h3><div id="errorHistory"></div></div>
+</section>
+
+<section id="structure" class="hidden">
+<div class="card"><h2>Карта проекта ЕГЭ-2027</h2>
+<p class="muted">Это не утверждённая спецификация. Карта построена по опубликованному ФИПИ проекту и его плану изменений.</p>
+<table><tr><th>№</th><th>Содержание</th><th>Ответ</th><th>Баллы</th></tr>
+<tr><td>1</td><td>Планиметрия</td><td>краткий</td><td>1</td></tr>
+<tr><td>2</td><td>Векторы</td><td>краткий</td><td>1</td></tr>
+<tr><td>3</td><td>Стереометрия</td><td>краткий</td><td>1</td></tr>
+<tr><td>4</td><td>Вероятность</td><td>краткий</td><td>1</td></tr>
+<tr><td>5</td><td>Вероятность сложных событий</td><td>краткий</td><td>1</td></tr>
+<tr><td>6</td><td>Случайные величины: распределение, матожидание, дисперсия, СКО</td><td>краткий</td><td>1</td></tr>
+<tr><td>7</td><td>Уравнения</td><td>краткий</td><td>1</td></tr>
+<tr><td>8</td><td>Преобразования выражений</td><td>краткий</td><td>1</td></tr>
+<tr><td>9</td><td>Функции, производная, первообразная/интеграл</td><td>краткий</td><td>1</td></tr>
+<tr><td>10</td><td>Прикладная текстовая задача</td><td>краткий</td><td>1</td></tr>
+<tr><td>11</td><td>Текстовая задача</td><td>краткий</td><td>1</td></tr>
+<tr><td>12</td><td>Графики функций</td><td>краткий</td><td>1</td></tr>
+<tr><td>13</td><td>Текстовые задачи, в том числе личные и семейные финансы</td><td>краткий</td><td>1</td></tr>
+<tr><td>14</td><td>Уравнение</td><td>развёрнутый</td><td>2</td></tr>
+<tr><td>15</td><td>Стереометрия</td><td>развёрнутый</td><td>3</td></tr>
+<tr><td>16</td><td>Неравенство</td><td>развёрнутый</td><td>2</td></tr>
+<tr><td>17</td><td>Моделирование и прикладная задача</td><td>развёрнутый</td><td>2</td></tr>
+<tr><td>18</td><td>Планиметрия</td><td>развёрнутый</td><td>3</td></tr>
+<tr><td>19</td><td>Параметр</td><td>развёрнутый</td><td>4</td></tr>
+<tr><td>20</td><td>Числа и их свойства / теория чисел</td><td>развёрнутый</td><td>4</td></tr>
+</table></div>
+</section>
+
+<section id="exam" class="hidden">
+<div class="card">
+<h2>Экзамен — 20 заданий по порядку</h2>
+<div class="grid">
+<div><span class="pill">Время</span><div id="examTimer" style="font-size:30px;font-weight:800;margin-top:5px">235:00</div></div>
+<div><span class="pill">Прогресс</span><div id="examProgress" style="font-size:22px;font-weight:700;margin-top:8px">Задание 1 из 20</div></div>
+</div>
+<div id="examIntro" class="card warn">Экзаменационный режим: задания выдаются строго по порядку с №1 по №20. Для №1–13 вводится краткий ответ, для №14–20 — развёрнутое решение. Таймер — 235 минут по проекту КИМ ЕГЭ-2027.</div>
+<button id="examStart" class="primary" onclick="startExam()">Начать экзамен</button>
+<div id="examTask" class="card hidden"></div>
+<div id="examResult" class="card hidden"></div>
+</div>
+</section>
+
+<section id="practice" class="hidden">
+<div class="card"><h2>Тренировка</h2>
+<div class="grid">
+<label>Номер
+<select id="num" class="answer">
+<option value="1">№1 Планиметрия</option><option value="2">№2 Векторы</option><option value="3">№3 Стереометрия</option><option value="4">№4 Вероятность</option><option value="5">№5 Вероятность</option><option value="6">№6 Случайные величины</option><option value="7">№7 Уравнения</option><option value="8">№8 Преобразования</option><option value="9">№9 Производная</option><option value="10">№10 Прикладная задача</option><option value="11">№11 Текстовая задача</option><option value="12">№12 Графики</option><option value="13">№13 Финансы/текстовая задача</option>
+</select></label>
+<label>Уровень
+<select id="level" class="answer"><option value="1">Базовый</option><option value="2" selected>Стандартный</option><option value="3">Повышенный</option></select>
+</label><button class="primary" onclick="newTask()">Новое задание</button>
+</div></div>
+<div id="task" class="card"></div>
+</section>
+
+<section id="part2" class="hidden">
+<div class="card"><h2>Часть 2 — развёрнутый ответ</h2>
+<select id="p2num" class="answer">
+<option value="14">№14 Уравнение</option><option value="15">№15 Стереометрия</option><option value="16">№16 Неравенство</option><option value="17">№17 Моделирование</option><option value="18">№18 Планиметрия</option><option value="19">№19 Параметр</option><option value="20">№20 Теория чисел</option>
+</select>
+<label>Уровень
+<select id="p2level" class="answer"><option value="1">Стандартный</option><option value="2">Повышенный</option></select>
+</label><button class="primary" onclick="newP2()">Новое задание</button>
+</div>
+<div id="p2task" class="card"></div>
+</section>
+
+<section id="theory" class="hidden">
+<div class="card"><h2>Проверенная базовая теория</h2>
+<p class="muted">Формулы не являются «авторскими». Это стандартные математические тождества, определения и теоремы школьного курса. Условия применения указаны там, где они существенны.</p>
+<div class="formula">Квадратное уравнение ax²+bx+c=0, a≠0: D=b²−4ac; x=(-b±√D)/(2a) при D≥0.</div>
+<div class="formula">Теорема Пифагора для прямоугольного треугольника: c²=a²+b², где c — гипотенуза.</div>
+<div class="formula">Скалярное произведение: a·b=|a||b|cosα. В координатах на плоскости: a·b=ax·bx+ay·by.</div>
+<div class="formula">Вероятность равновозможных исходов: P(A)=m/n.</div>
+<div class="formula">Для несовместимых событий: P(A∪B)=P(A)+P(B). В общем случае: P(A∪B)=P(A)+P(B)−P(A∩B).</div>
+<div class="formula">Математическое ожидание дискретной случайной величины: E(X)=Σ xi·pi, где Σpi=1.</div>
+<div class="formula">Дисперсия: D(X)=E(X²)−[E(X)]². Стандартное отклонение: σ(X)=√D(X).</div>
+<div class="formula">Производная: (xⁿ)'=n·xⁿ⁻¹ для целых n и там, где функция определена; (sin x)'=cos x; (cos x)'=−sin x; (eˣ)'=eˣ; (ln x)'=1/x при x>0.</div>
+<div class="formula">Производная суммы: (f+g)'=f'+g'; произведения: (fg)'=f'g+fg'; частного: (f/g)'=(f'g−fg')/g² при g≠0.</div>
+<div class="formula">Первообразная: F'(x)=f(x). Если f непрерывна на [a,b], то ∫ₐᵇf(x)dx=F(b)−F(a).</div>
+<div class="formula">Площадь треугольника: S=(1/2)ah, где h — высота к стороне a; также S=(1/2)ab sinγ.</div>
+<div class="formula">Объём призмы: V=Sосн·h. Объём прямоугольного параллелепипеда: V=abc.</div>
+<div class="formula">Логарифм: logₐb=c ⇔ aᶜ=b, при a>0, a≠1, b>0.</div>
+<div class="formula">Свойства логарифмов применяются при допустимых значениях аргументов: logₐ(xy)=logₐx+logₐy при x>0,y>0; logₐ(x/y)=logₐx−logₐy при x>0,y>0.</div>
+<div class="formula">Неравенство Коши для x>0: x+A²/x≥2A, A>0. Равенство при x=A.</div>
+<div class="formula">Для арифметической прогрессии: aₙ=a₁+(n−1)d; Sₙ=n(a₁+aₙ)/2.</div>
+</div>
+</section>
+</main>
+
+<script>
+const $=s=>document.querySelector(s);
+let current=null,p2current=null;
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('section').forEach(x=>x.classList.add('hidden'));$('#'+b.dataset.page).classList.remove('hidden');if(b.dataset.page==='adaptive')renderAdaptive();});
+
+const r=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+const clean=x=>String(x).replace(',','.').trim();
+const eq=(a,b)=>Math.abs(Number(clean(a))-Number(b))<1e-9;
+
+function loadAdaptive(){try{return JSON.parse(localStorage.getItem('egeAdaptiveV52')||'{"topics":{},"errors":[]}')}catch(e){return {topics:{},errors:[]}}}
+function saveAdaptive(x){localStorage.setItem('egeAdaptiveV52',JSON.stringify(x))}
+function registerResult(title,ok,user,correct){
+ const st=loadAdaptive(), topic=title;
+ if(!st.topics[topic])st.topics[topic]={attempts:0,correct:0};
+ st.topics[topic].attempts++; if(ok)st.topics[topic].correct++;
+ if(!ok){st.errors.unshift({date:new Date().toLocaleString('ru-RU'),topic,user,correct});st.errors=st.errors.slice(0,20)}
+ saveAdaptive(st); renderAdaptive();
+}
+function setTask(title,body,answer,explain){
+ current={answer,title};
+ $('#task').innerHTML=`<span class="pill">${title}</span><div class="card" style="margin:12px 0 0">${body}</div>
+ <input id="ans" class="answer" placeholder="Введите краткий ответ">
+ <button class="primary" style="margin-top:10px" onclick="check()">Проверить</button><div id="res"></div>`;
+}
+function check(){
+ const v=$('#ans').value, ok=eq(v,current.answer);
+ registerResult(current.title,ok,v,current.answer);
+ if(ok)$('#res').innerHTML='<div class="card success"><span class="ok">Верно.</span> Ответ принят.</div>';
+ else $('#res').innerHTML=`<div class="card"><span class="bad">Неверно.</span><p>Правильный ответ: <b>${current.answer}</b></p><p class="muted">Повторите эту тему через раздел «Мои ошибки».</p></div>`;
+}
+function renderAdaptive(){
+ const st=loadAdaptive(), a=Object.entries(st.topics);
+ a.sort((x,y)=>(x[1].correct/x[1].attempts)-(y[1].correct/y[1].attempts));
+ $('#adaptiveSummary').innerHTML=a.length?'<table><tr><th>Тема</th><th>Попытки</th><th>Верно</th><th>Точность</th></tr>'+a.map(([k,v])=>`<tr><td>${k}</td><td>${v.attempts}</td><td>${v.correct}</td><td>${Math.round(v.correct/v.attempts*100)}%</td></tr>`).join('')+'</table><p><b>Приоритет:</b> '+a[0][0]+'</p>':'<p class="muted">Пока нет статистики. Решите несколько заданий.</p>';
+ $('#weakTopic').innerHTML=a.length?a.map(([k])=>`<option>${k}</option>`).join(''):'<option>Пока нет данных</option>';
+ $('#errorHistory').innerHTML=st.errors.length?st.errors.map(e=>`<div class="card"><b>${e.topic}</b> · ${e.date}<br>Ваш ответ: ${e.user}; правильный: ${e.correct}</div>`).join(''):'<p class="muted">Ошибок пока нет.</p>';
+}
+function adaptiveTask(){
+ const v=$('#weakTopic').value, m=v.match(/№(\d+)/); if(!m)return;
+ $('#num').value=+m[1]; document.querySelector('[data-page="practice"]').click(); newTask();
+}
+
+let exam=null;
+function startExam(){
+  if(exam && !exam.finished){
+    if(!confirm('Текущий экзамен уже идёт. Начать новый и сбросить прогресс?')) return;
+  }
+  exam={index:1,startedAt:Date.now(),deadline:Date.now()+235*60*1000,finished:false,answers:{},correct:0};
+  localStorage.setItem('egeExamV57',JSON.stringify(exam));
+  $('#examStart').classList.add('hidden'); $('#examIntro').classList.add('hidden'); $('#examResult').classList.add('hidden'); $('#examTask').classList.remove('hidden');
+  renderExamTask(); updateExamTimer(); clearInterval(window.examTimerId); window.examTimerId=setInterval(updateExamTimer,1000);
+}
+function updateExamTimer(){
+  if(!exam||exam.finished)return;
+  const left=Math.max(0,exam.deadline-Date.now());
+  const total=Math.floor(left/1000); const mm=Math.floor(total/60), ss=total%60;
+  $('#examTimer').textContent=`${String(mm).padStart(3,'0')}:${String(ss).padStart(2,'0')}`;
+  if(left<=0) finishExam(true);
+}
+function renderExamTask(){
+  if(!exam||exam.finished)return;
+  const n=exam.index; $('#examProgress').textContent=`Задание ${n} из 20`;
+  if(n<=13){
+    $('#num').value=String(n); $('#level').value='2'; newTask();
+    const node=$('#task').cloneNode(true); node.querySelector('button')?.remove(); node.querySelector('#res')?.remove();
+    const html=node.innerHTML;
+    $('#examTask').innerHTML=`<div class="pill">Экзамен · №${n} · краткий ответ</div>${html}<button class="primary" style="margin-top:12px" onclick="examNextShort()">Следующее задание →</button>`;
+  }else{
+    $('#p2num').value=String(n); $('#p2level').value='1'; newP2();
+    const node=$('#p2task').cloneNode(true); node.querySelector('button')?.remove(); node.querySelector('#p2res')?.remove();
+    const html=node.innerHTML;
+    $('#examTask').innerHTML=`<div class="pill">Экзамен · №${n} · развёрнутый ответ</div>${html}<button class="primary" style="margin-top:12px" onclick="examNextLong()">${n===20?'Завершить экзамен':'Следующее задание →'}</button>`;
+  }
+}
+function saveExam(){localStorage.setItem('egeExamV57',JSON.stringify(exam));}
+function examNextShort(){
+  if(!exam||exam.finished)return;
+  const input=$('#examTask #ans');
+  if(!input||!input.value.trim()){alert('Введите ответ перед переходом к следующему заданию.');return;}
+  exam.answers[exam.index]=input.value.trim();
+  exam.index++; saveExam();
+  if(exam.index>20)finishExam(false); else renderExamTask();
+}
+function examNextLong(){
+  if(!exam||exam.finished)return;
+  const input=$('#examTask #solution');
+  if(!input||!input.value.trim()){alert('Запишите решение перед переходом к следующему заданию.');return;}
+  exam.answers[exam.index]=input.value.trim();
+  exam.index++; saveExam();
+  if(exam.index>20)finishExam(false); else renderExamTask();
+}
+function finishExam(timeUp=false){
+  if(!exam||exam.finished)return;
+  exam.finished=true; exam.finishedAt=Date.now(); saveExam(); clearInterval(window.examTimerId);
+  $('#examTask').classList.add('hidden'); $('#examResult').classList.remove('hidden'); $('#examStart').classList.remove('hidden'); $('#examStart').textContent='Начать новый экзамен';
+  const answered=Object.keys(exam.answers).length;
+  $('#examResult').innerHTML=`<h3>${timeUp?'Время закончилось.':'Экзамен завершён.'}</h3><p>Выполнено заданий: <b>${answered} из 20</b>.</p><p class="muted">В этом режиме ответы сохраняются как учебная попытка. Для №14–20 автоматическая оценка развёрнутого решения не выполняется.</p>`;
+}
+function loadExam(){
+  try{const x=JSON.parse(localStorage.getItem('egeExamV57')||'null'); if(x&&!x.finished&&x.deadline>Date.now()){exam=x; $('#examStart').classList.add('hidden'); $('#examIntro').classList.add('hidden'); $('#examTask').classList.remove('hidden'); renderExamTask(); updateExamTimer(); clearInterval(window.examTimerId); window.examTimerId=setInterval(updateExamTimer,1000);}}catch(e){}
+}
+
+function newTask(){
+ const n=+$('#num').value, L=+$('#level').value;
+ const A=(title,body,answer,tag)=>setTask(title+' · '+tag,body,answer);
+ const V=()=>r(1,3);
+ if(n===1){
+  if(L===1){let v=V();if(v===1){let a=r(3,6),b=r(4,8);A('№1 · планиметрия',`В прямоугольном треугольнике катеты равны ${a} см и ${b} см. Найдите длину гипотенузы. Ответ округлите до сотых.`,Math.round(Math.hypot(a,b)*100)/100,'вариант A');}
+   if(v===2){let c=r(6,12),a=r(3,5);let b=Math.sqrt(c*c-a*a);A('№1 · планиметрия',`Гипотенуза прямоугольного треугольника равна ${c} см, один катет — ${a} см. Найдите второй катет. Ответ округлите до сотых.`,Math.round(b*100)/100,'вариант B');}
+   if(v===3){let a=r(5,9),b=r(6,10);A('№1 · планиметрия',`Катеты прямоугольного треугольника равны ${a} см и ${b} см. Найдите площадь треугольника.`,a*b/2,'вариант C');}}
+  if(L===2){let v=V();if(v===1){let a=r(5,10),h=r(3,8);A('№1 · планиметрия',`Основание треугольника ${a} см, высота к нему ${h} см. Найдите площадь.`,a*h/2,'вариант A');}
+   if(v===2){let S=r(20,60),a=r(5,10);A('№1 · планиметрия',`Площадь треугольника ${S} см², основание ${a} см. Найдите высоту к этому основанию.`,2*S/a,'вариант B');}
+   if(v===3){let a=r(4,9),b=r(5,12),c=Math.hypot(a,b);A('№1 · планиметрия',`В прямоугольном треугольнике катеты ${a} см и ${b} см. Найдите радиус вписанной окружности. Ответ округлите до сотых.`,Math.round(((a+b-c)/2)*100)/100,'вариант C');}}
+  if(L===3){let v=V();if(v===1){let a=r(4,9),b=r(5,12),ans=(a+b-Math.hypot(a,b))/2;A('№1 · планиметрия',`В прямоугольном треугольнике катеты ${a} см и ${b} см. Найдите радиус вписанной окружности. Ответ округлите до сотых.`,Math.round(ans*100)/100,'вариант A');}
+   if(v===2){let a=r(6,10),b=r(8,15),c=Math.hypot(a,b),S=a*b/2;A('№1 · планиметрия',`В прямоугольном треугольнике катеты ${a} см и ${b} см. Найдите отношение площади треугольника к его полупериметру. Ответ округлите до сотых.`,Math.round((S/((a+b+c)/2))*100)/100,'вариант B');}
+   if(v===3){let c=r(10,15),a=r(6,9),b=Math.sqrt(c*c-a*a);let S=a*b/2;A('№1 · планиметрия',`Гипотенуза прямоугольного треугольника ${c} см, один катет ${a} см. Найдите площадь. Ответ округлите до сотых.`,Math.round(S*100)/100,'вариант C');}}
+ }
+ if(n===2){
+  if(L===1){let v=V();if(v===1){let ax=r(1,5),ay=r(1,5),bx=r(1,5),by=r(1,5);A('№2 · векторы',`a=(${ax}; ${ay}), b=(${bx}; ${by}). Найдите скалярное произведение векторов.`,ax*bx+ay*by,'вариант A');}
+   if(v===2){let ax=r(1,5),ay=r(1,5),bx=r(1,5),by=r(1,5);A('№2 · векторы',`Векторы a=(${ax}; ${ay}) и b=(${bx}; ${by}). Найдите число ax·bx+ay·by.`,ax*bx+ay*by,'вариант B');}
+   if(v===3){let ax=r(1,5),ay=r(1,5),bx=r(1,5),by=r(1,5);A('№2 · векторы',`Для a=(${ax}; ${ay}) и b=(${bx}; ${by}) вычислите a₁b₁+a₂b₂.`,ax*bx+ay*by,'вариант C');}}
+  if(L===2){let v=V();if(v===1){let ax=r(1,5),ay=r(-5,5),bx=r(-5,5),by=r(1,5);A('№2 · векторы',`a=(${ax}; ${ay}), b=(${bx}; ${by}). Найдите a·b.`,ax*bx+ay*by,'вариант A');}
+   if(v===2){let ax=r(1,5),ay=r(-5,5),bx=r(-5,5),by=r(1,5);A('№2 · векторы',`Векторы u=(${ax}; ${ay}) и v=(${bx}; ${by}). Чему равно их скалярное произведение?`,ax*bx+ay*by,'вариант B');}
+   if(v===3){let ax=r(1,5),ay=r(-5,5),bx=r(-5,5),by=r(1,5);A('№2 · векторы',`Даны координаты векторов p=(${ax}; ${ay}) и q=(${bx}; ${by}). Вычислите p₁q₁+p₂q₂.`,ax*bx+ay*by,'вариант C');}}
+  if(L===3){let v=V();if(v===1){let ax=r(1,5),ay=r(1,5),bx=-ay,by=ax;A('№2 · векторы',`a=(${ax}; ${ay}), b=(${bx}; ${by}). Найдите косинус угла между векторами.`,0,'вариант A');}
+   if(v===2){let ax=r(1,5),ay=r(1,5),bx=-ay,by=ax;A('№2 · векторы',`Векторы a=(${ax}; ${ay}) и b=(${bx}; ${by}) перпендикулярны. Найдите cos угла между ними.`,0,'вариант B');}
+   if(v===3){let ax=r(1,5),ay=r(1,5),bx=-ay,by=ax;A('№2 · векторы',`Для векторов a=(${ax}; ${ay}) и b=(${bx}; ${by}) вычислите косинус угла между ними.`,0,'вариант C');}}
+ }
+ if(n===3){
+  if(L===1){let v=V();if(v===1){let a=r(2,6),b=r(3,7),c=r(4,8);A('№3 · стереометрия',`Прямоугольный параллелепипед имеет рёбра ${a}, ${b}, ${c} см. Найдите его объём.`,a*b*c,'вариант A');}
+   if(v===2){let a=r(2,6),b=r(3,7),c=r(4,8);A('№3 · стереометрия',`Длина, ширина и высота коробки равны ${a}, ${b} и ${c} см. Каков её объём?`,a*b*c,'вариант B');}
+   if(v===3){let a=r(2,6),b=r(3,7),c=r(4,8);A('№3 · стереометрия',`У прямоугольного параллелепипеда измерения ${a} см, ${b} см и ${c} см. Определите объём.`,a*b*c,'вариант C');}}
+  if(L===2){let v=V();if(v===1){let S=r(6,20),h=r(3,9);A('№3 · стереометрия',`Площадь основания призмы ${S} см², высота ${h} см. Найдите объём.`,S*h,'вариант A');}
+   if(v===2){let S=r(6,20),h=r(3,9);A('№3 · стереометрия',`Основание призмы имеет площадь ${S} см². При высоте ${h} см найдите объём призмы.`,S*h,'вариант B');}
+   if(v===3){let Vv=r(30,120),h=r(3,9);A('№3 · стереометрия',`Объём призмы ${Vv} см³, высота ${h} см. Найдите площадь её основания.`,Vv/h,'вариант C');}}
+  if(L===3){let v=V();if(v===1){let r0=r(2,6),h=r(3,8),ans=Math.PI*r0*r0*h;A('№3 · стереометрия',`Цилиндр радиуса ${r0} см и высоты ${h} см. Найдите объём. Ответ округлите до сотых.`,Math.round(ans*100)/100,'вариант A');}
+   if(v===2){let r0=r(2,6),h=r(3,8),ans=Math.PI*r0*r0*h;A('№3 · стереометрия',`Радиус основания цилиндра ${r0} см, высота ${h} см. Вычислите объём цилиндра. Ответ округлите до сотых.`,Math.round(ans*100)/100,'вариант B');}
+   if(v===3){let r0=r(2,6),h=r(3,8),ans=2*Math.PI*r0*h;A('№3 · стереометрия',`Цилиндр имеет радиус ${r0} см и высоту ${h} см. Найдите площадь боковой поверхности. Ответ округлите до сотых.`,Math.round(ans*100)/100,'вариант C');}}
+ }
+ if(n===4){
+  if(L===1){let v=V();if(v===1){let a=r(2,5),b=r(2,6);A('№4 · вероятность',`В коробке ${a} белых и ${b} чёрных шаров. Наугад достают один шар. Найдите вероятность того, что он белый.`,a/(a+b),'вариант A');}
+   if(v===2){let good=r(3,7),all=r(good+2,12);A('№4 · вероятность',`В партии ${all} деталей, из них ${good} качественные. Случайно выбирают одну деталь. Найдите вероятность выбрать качественную.`,good/all,'вариант B');}
+   if(v===3){let a=r(2,6),b=r(3,7);A('№4 · вероятность',`На карточках записаны ${a} чисел одного вида и ${b} другого. Карточку выбирают случайно. Вероятность выбрать карточку первого вида?`,a/(a+b),'вариант C');}}
+  if(L===2){let v=V();if(v===1){let good=r(3,7),all=r(good+2,12);A('№4 · вероятность',`Из ${all} лотерейных билетов ${good} выигрышных. Билет выбирают случайно. Найдите вероятность выигрыша.`,good/all,'вариант A');}
+   if(v===2){let good=r(3,7),all=r(good+2,12);A('№4 · вероятность',`В классе ${all} учащихся, ${good} из них занимаются в кружке. Случайно выбранный ученик. Какова вероятность, что он посещает кружок?`,good/all,'вариант B');}
+   if(v===3){let good=r(3,7),all=r(good+2,12);A('№4 · вероятность',`Из ${all} одинаково возможных исходов ${good} являются благоприятными событию A. Найдите P(A).`,good/all,'вариант C');}}
+  if(L===3){let v=V();if(v===1){let p=r(2,7)/10;A('№4 · вероятность',`Вероятность события A равна ${p}. Найдите вероятность противоположного события.`,1-p,'вариант A');}
+   if(v===2){let p=r(2,7)/10;A('№4 · вероятность',`Событие A происходит с вероятностью ${p}. Какова вероятность, что A не произойдёт?`,1-p,'вариант B');}
+   if(v===3){let p=r(2,7)/10;A('№4 · вероятность',`Известно, что P(A)=${p}. Вычислите P(Ā).`,1-p,'вариант C');}}
+ }
+ if(n===5){
+  if(L===1){let v=V();if(v===1){let p=r(2,7)/10,q=r(2,7)/10;A('№5 · вероятность',`События A и B независимы, P(A)=${p}, P(B)=${q}. Найдите P(A∩B).`,p*q,'вариант A');}
+   if(v===2){let p=r(2,7)/10,q=r(2,7)/10;A('№5 · вероятность',`Вероятности двух независимых событий равны ${p} и ${q}. Найдите вероятность их одновременного наступления.`,p*q,'вариант B');}
+   if(v===3){let p=r(2,7)/10,q=r(2,7)/10;A('№5 · вероятность',`A и B — независимые события с вероятностями ${p} и ${q}. Чему равна вероятность A и B одновременно?`,p*q,'вариант C');}}
+  if(L===2){let v=V();if(v===1){let p=r(2,7)/10,q=r(2,7)/10;A('№5 · вероятность',`События независимы. P(A)=${p}, P(B)=${q}. Найдите P(A∪B).`,p+q-p*q,'вариант A');}
+   if(v===2){let p=r(2,7)/10,q=r(2,7)/10;A('№5 · вероятность',`Независимые события A и B имеют вероятности ${p} и ${q}. Найдите вероятность наступления хотя бы одного из них.`,p+q-p*q,'вариант B');}
+   if(v===3){let p=r(2,7)/10,q=r(2,7)/10;A('№5 · вероятность',`P(A)=${p}, P(B)=${q}, события независимы. Какова вероятность, что произойдёт A или B?`,p+q-p*q,'вариант C');}}
+  if(L===3){let v=V();if(v===1){let p=r(2,7)/10,q=r(2,7)/10;A('№5 · вероятность',`A и B независимы, P(A)=${p}, P(B)=${q}. Найдите вероятность того, что произойдёт ровно одно событие.`,p*(1-q)+(1-p)*q,'вариант A');}
+   if(v===2){let p=r(2,7)/10,q=r(2,7)/10;A('№5 · вероятность',`Вероятности независимых событий A и B равны ${p} и ${q}. Какова вероятность наступления только одного из них?`,p*(1-q)+(1-p)*q,'вариант B');}
+   if(v===3){let p=r(2,7)/10,q=r(2,7)/10;A('№5 · вероятность',`Для независимых A и B: P(A)=${p}, P(B)=${q}. Найдите P((A∩B̄)∪(Ā∩B)).`,p*(1-q)+(1-p)*q,'вариант C');}}
+ }
+ if(n===6){
+  if(L===1){let v=V();if(v===1){A('№6 · случайная величина',`Случайная величина X принимает значения 0 и 2 с вероятностями 0,25 и 0,75. Найдите математическое ожидание X.`,1.5,'вариант A');}
+   if(v===2){A('№6 · случайная величина',`X=1 с вероятностью 0,2 и X=5 с вероятностью 0,8. Найдите E(X).`,4.2,'вариант B');}
+   if(v===3){A('№6 · случайная величина',`Случайная величина принимает 2 и 6 с вероятностями 0,3 и 0,7. Найдите её математическое ожидание.`,4.8,'вариант C');}}
+  if(L===2){let v=V();if(v===1){let x=r(1,4),y=r(5,9),p=r(2,5)/10;A('№6 · случайная величина',`X принимает ${x} и ${y} с вероятностями ${p} и ${1-p}. Найдите E(X).`,x*p+y*(1-p),'вариант A');}
+   if(v===2){let x=r(2,5),y=r(6,10),p=r(2,5)/10;A('№6 · случайная величина',`Возможные значения X: ${x} и ${y}; их вероятности ${p} и ${1-p}. Определите математическое ожидание.`,x*p+y*(1-p),'вариант B');}
+   if(v===3){let x=r(1,4),y=r(6,9),p=r(3,6)/10;A('№6 · случайная величина',`Дана таблица распределения: X=${x} с вероятностью ${p}, X=${y} с вероятностью ${1-p}. Найдите E(X).`,x*p+y*(1-p),'вариант C');}}
+  if(L===3){let v=V();if(v===1){let x=r(1,3),y=r(5,8),p=.25,m=x*p+y*(1-p),ans=x*x*.25+y*y*.75-m*m;A('№6 · случайная величина',`X принимает ${x} и ${y} с вероятностями 0,25 и 0,75. Найдите D(X). Ответ округлите до сотых.`,Math.round(ans*100)/100,'вариант A');}
+   if(v===2){let x=r(1,3),y=r(5,8),p=.5,m=(x+y)/2,ans=(x*x+y*y)/2-m*m;A('№6 · случайная величина',`X принимает ${x} и ${y} с одинаковыми вероятностями. Найдите дисперсию. Ответ округлите до сотых.`,Math.round(ans*100)/100,'вариант B');}
+   if(v===3){let x=r(1,3),y=r(5,8),p=.2,m=x*p+y*(1-p),ans=x*x*p+y*y*(1-p)-m*m;A('№6 · случайная величина',`X=${x} с вероятностью 0,2 и X=${y} с вероятностью 0,8. Найдите дисперсию. Ответ округлите до сотых.`,Math.round(ans*100)/100,'вариант C');}}
+ }
+ if(n===7){
+  if(L===1){let v=V();if(v===1){let x1=r(-6,-1),x2=r(1,6);A('№7 · уравнения',`Решите уравнение x²−${x1+x2}x+${x1*x2}=0. Введите сумму его корней.`,x1+x2,'вариант A');}
+   if(v===2){let x1=r(-6,-1),x2=r(1,6);A('№7 · уравнения',`Корни уравнения x²−${x1+x2}x+${x1*x2}=0. Найдите их произведение.`,x1*x2,'вариант B');}
+   if(v===3){let x1=r(1,6),x2=r(2,7);A('№7 · уравнения',`Уравнение x²−${x1+x2}x+${x1*x2}=0 имеет корни x₁ и x₂. Найдите x₁²+x₂².`,x1*x1+x2*x2,'вариант C');}}
+  if(L===2){let v=V();if(v===1){let a=r(2,7),b=r(1,6);A('№7 · уравнения',`Решите уравнение 2x+${a}=${b}.`,(b-a)/2,'вариант A');}
+   if(v===2){let a=r(2,7),b=r(1,6);A('№7 · уравнения',`Найдите x из равенства ${a}x=${b}.`,b/a,'вариант B');}
+   if(v===3){let a=r(2,7),b=r(1,6);A('№7 · уравнения',`Решите ${a}x−${b}=0.`,b/a,'вариант C');}}
+  if(L===3){let v=V();if(v===1){let a=r(2,5),b=r(1,4);A('№7 · уравнения',`Решите ${a}^x=${a**b}. Введите x.`,b,'вариант A');}
+   if(v===2){let a=r(2,5),b=r(1,4);A('№7 · уравнения',`Найдите x: ${a}^{x+1}=${a**(b+1)}.`,b,'вариант B');}
+   if(v===3){let a=r(2,5),b=r(1,4);A('№7 · уравнения',`Решите уравнение ${a}^{2x}=${a**(2*b)}.`,b,'вариант C');}}
+ }
+ if(n===8){
+  if(L===1){let v=V();if(v===1){let a=r(4,9),b=r(1,a-1);A('№8 · преобразования',`Вычислите (${a}²−${b}²)/(${a}−${b}).`,a+b,'вариант A');}
+   if(v===2){let a=r(4,9),b=r(1,a-1);A('№8 · преобразования',`Упростите выражение (${a}²−${b}²)/(${a}−${b}).`,a+b,'вариант B');}
+   if(v===3){let a=r(4,9),b=r(1,a-1);A('№8 · преобразования',`Найдите значение дроби (${a}²−${b}²)/(${a}−${b}).`,a+b,'вариант C');}}
+  if(L===2){let v=V();if(v===1){let a=r(2,5),b=r(2,5);A('№8 · преобразования',`Вычислите √(${a*a})+√(${b*b}).`,a+b,'вариант A');}
+   if(v===2){let a=r(2,5),b=r(2,5);A('№8 · преобразования',`Найдите значение выражения √(${a*a})−√(${b*b}).`,a-b,'вариант B');}
+   if(v===3){let a=r(2,5),b=r(2,5);A('№8 · преобразования',`Вычислите √(${a*a})·√(${b*b}).`,a*b,'вариант C');}}
+  if(L===3){let v=V();if(v===1){let a=r(2,6);A('№8 · преобразования',`Вычислите log₂(${2**a}).`,a,'вариант A');}
+   if(v===2){let a=r(2,6);A('№8 · преобразования',`Решите log₂ x=${a}.`,2**a,'вариант B');}
+   if(v===3){let a=r(2,6);A('№8 · преобразования',`Найдите x, если log₂(2x)=${a}.`,2**(a-1),'вариант C');}}
+ }
+ if(n===9){
+  if(L===1){let v=V();if(v===1){let a=r(2,6),x=r(-2,3);A('№9 · функции и производная',`f(x)=${a}x²−3x. Найдите f'(${x}).`,2*a*x-3,'вариант A');}
+   if(v===2){let a=r(2,6),x=r(-2,3);A('№9 · функции и производная',`f(x)=${a}x²+4x. Вычислите f'(${x}).`,2*a*x+4,'вариант B');}
+   if(v===3){let a=r(2,6),x=r(-2,3);A('№9 · функции и производная',`f(x)=x³−${a}x. Найдите f'(${x}).`,3*x*x-a,'вариант C');}}
+  if(L===2){let v=V();if(v===1){let a=r(2,6);A('№9 · функции и производная',`f(x)=${a}x−x². Найдите абсциссу точки, где f'(x)=0.`,a/2,'вариант A');}
+   if(v===2){let a=r(2,6);A('№9 · функции и производная',`f(x)=x²−${a}x. При каком x производная равна нулю?`,a/2,'вариант B');}
+   if(v===3){let a=r(2,6);A('№9 · функции и производная',`Для f(x)=−x²+${a}x найдите точку, в которой касательная горизонтальна. Укажите её абсциссу.`,a/2,'вариант C');}}
+  if(L===3){let v=V();if(v===1){let a=r(2,6),x=r(1,4);A('№9 · функции и производная',`F(x)=x³−${a}x. Найдите F'(${x}).`,3*x*x-a,'вариант A');}
+   if(v===2){let a=r(2,6),x=r(1,4);A('№9 · функции и производная',`g(x)=${a}x³−2x. Вычислите g'(${x}).`,3*a*x*x-2,'вариант B');}
+   if(v===3){let a=r(2,6),x=r(1,4);A('№9 · функции и производная',`h(x)=x⁴−${a}x². Найдите h'(${x}).`,4*x*x*x-2*a*x,'вариант C');}}
+ }
+ if(n===10){
+  if(L===1){let v=V();if(v===1){let speed=r(40,70),time=r(2,5);A('№10 · прикладная задача',`Автомобиль движется ${time} ч со скоростью ${speed} км/ч. Какое расстояние он проедет?`,speed*time,'вариант A');}
+   if(v===2){let speed=r(40,70),time=r(2,5);A('№10 · прикладная задача',`Велосипедист ехал ${time} ч со скоростью ${speed} км/ч. Найдите длину пути.`,speed*time,'вариант B');}
+   if(v===3){let speed=r(40,70),dist=r(120,350);A('№10 · прикладная задача',`Поезд прошёл ${dist} км со скоростью ${speed} км/ч. Сколько часов длилось движение?`,dist/speed,'вариант C');}}
+  if(L===2){let v=V();if(v===1){let speed=r(40,70),t=r(2,5),stop=r(10,30),ans=speed*t/(t+stop/60);A('№10 · прикладная задача',`Путь ${speed*t} км проехали за ${t} ч, затем остановились на ${stop} мин. Найдите среднюю скорость за всё время. Ответ округлите до сотых.`,Math.round(ans*100)/100,'вариант A');}
+   if(v===2){let speed=r(40,70),t=r(2,5),stop=r(10,30),ans=speed*t/(t+stop/60);A('№10 · прикладная задача',`Автомобиль двигался ${t} ч со скоростью ${speed} км/ч и сделал остановку ${stop} мин. Определите среднюю скорость с учётом остановки. Ответ округлите до сотых.`,Math.round(ans*100)/100,'вариант B');}
+   if(v===3){let speed=r(40,70),t=r(2,5),stop=r(10,30),ans=speed*t/(t+stop/60);A('№10 · прикладная задача',`За ${t} ч автомобиль прошёл ${speed*t} км, после чего стоял ${stop} мин. Какова средняя скорость на всём промежутке времени?`,Math.round(ans*100)/100,'вариант C');}}
+  if(L===3){let v=V();if(v===1){let s=r(120,300),speed=r(40,80),ans=s/((s/2)/speed+(s/2)/(speed+20));A('№10 · прикладная задача',`Расстояние ${s} км. Первую половину пути ехали со скоростью ${speed} км/ч, вторую — со скоростью ${speed+20} км/ч. Найдите среднюю скорость. Ответ округлите до сотых.`,Math.round(ans*100)/100,'вариант A');}
+   if(v===2){let s=r(120,300),speed=r(40,80),ans=s/((s/2)/speed+(s/2)/(speed+20));A('№10 · прикладная задача',`Маршрут длиной ${s} км разделён пополам. Первая половина пройдена со скоростью ${speed} км/ч, вторая — ${speed+20} км/ч. Найдите среднюю скорость движения.`,Math.round(ans*100)/100,'вариант B');}
+   if(v===3){let s=r(120,300),speed=r(40,80),ans=s/((s/2)/speed+(s/2)/(speed+20));A('№10 · прикладная задача',`Автомобиль преодолел ${s} км: ${s/2} км со скоростью ${speed} км/ч и столько же со скоростью ${speed+20} км/ч. Найдите среднюю скорость на всём пути.`,Math.round(ans*100)/100,'вариант C');}}
+ }
+ if(n===11){
+  if(L===1){let v=V();if(v===1){let speed=r(40,80),time=r(2,5);A('№11 · текстовая задача',`Скорость ${speed} км/ч, время ${time} ч. Найдите пройденный путь.`,speed*time,'вариант A');}
+   if(v===2){let speed=r(40,80),dist=r(100,300);A('№11 · текстовая задача',`Катер движется со скоростью ${speed} км/ч. Какое расстояние он пройдёт за ${dist/speed} ч?`,dist,'вариант B');}
+   if(v===3){let dist=r(120,300),time=r(2,5);A('№11 · текстовая задача',`Расстояние ${dist} км пройдено за ${time} ч. Найдите скорость движения.`,dist/time,'вариант C');}}
+  if(L===2){let v=V();if(v===1){let p=r(10,30),price=r(5,20)*1000;A('№11 · проценты',`Цена товара ${price} руб. увеличилась на ${p}%. Какой стала цена?`,price*(1+p/100),'вариант A');}
+   if(v===2){let p=r(10,30),price=r(5,20)*1000;A('№11 · проценты',`Зарплата ${price} руб. была повышена на ${p}%. Найдите новую зарплату.`,price*(1+p/100),'вариант B');}
+   if(v===3){let p=r(10,30),price=r(5,20)*1000;A('№11 · проценты',`Стоимость ${price} руб. выросла на ${p}%. Определите величину новой стоимости.`,price*(1+p/100),'вариант C');}}
+  if(L===3){let v=V();if(v===1){let p=r(10,25),price=r(10,30)*1000;A('№11 · проценты',`После скидки ${p}% цена стала ${price} руб. Какова была исходная цена?`,price/(1-p/100),'вариант A');}
+   if(v===2){let p=r(10,25),price=r(10,30)*1000;A('№11 · проценты',`Товар уценили на ${p}%, и его цена составила ${price} руб. Найдите первоначальную цену.`,price/(1-p/100),'вариант B');}
+   if(v===3){let p=r(10,25),price=r(10,30)*1000;A('№11 · проценты',`После уменьшения стоимости на ${p}% товар стал стоить ${price} руб. Сколько он стоил до уценки?`,price/(1-p/100),'вариант C');}}
+ }
+ if(n===12){
+  if(L===1){let v=V();if(v===1){let x=r(-4,4);A('№12 · графики',`Для функции f(x)=x²+2x−3 найдите f(${x}).`,x*x+2*x-3,'вариант A');}
+   if(v===2){let x=r(-4,4);A('№12 · графики',`Вычислите значение функции y=x²−4x+1 при x=${x}.`,x*x-4*x+1,'вариант B');}
+   if(v===3){let x=r(-4,4);A('№12 · графики',`Функция задана формулой f(x)=2x²−x. Найдите f(${x}).`,2*x*x-x,'вариант C');}}
+  if(L===2){let v=V();if(v===1){let a=r(2,6);A('№12 · графики',`f(x)=${a}x−${a}. При каком x f(x)=0?`,1,'вариант A');}
+   if(v===2){let a=r(2,6),b=r(1,5);A('№12 · графики',`Функция f(x)=${a}x−${b}. Найдите нуль функции.`,b/a,'вариант B');}
+   if(v===3){let a=r(2,6),b=r(1,5);A('№12 · графики',`График y=${a}x+${b} пересекает ось Ox в точке. Найдите её абсциссу.`,-b/a,'вариант C');}}
+  if(L===3){let v=V();if(v===1){let a=r(2,5);A('№12 · графики',`Для f(x)=x²−${a}x найдите абсциссу вершины параболы.`,a/2,'вариант A');}
+   if(v===2){let a=r(2,5),b=r(2,6);A('№12 · графики',`Найдите абсциссу вершины параболы y=x²−${a}x+${b}.`,a/2,'вариант B');}
+   if(v===3){let a=r(2,5),b=r(-4,4);A('№12 · графики',`Парабола y=x²+${b}x+${a} имеет вершину. Найдите её абсциссу.`,-b/2,'вариант C');}}
+ }
+ if(n===13){
+  if(L===1){let v=V();if(v===1){let price=r(10,30)*1000,p=r(10,30);A('№13 · финансовая задача',`Товар стоит ${price} руб. и продаётся со скидкой ${p}%. Найдите цену после скидки.`,price*(1-p/100),'вариант A');}
+   if(v===2){let price=r(10,30)*1000,p=r(10,30);A('№13 · финансовая задача',`На товар стоимостью ${price} руб. установили скидку ${p}%. Сколько нужно заплатить?`,price*(1-p/100),'вариант B');}
+   if(v===3){let price=r(10,30)*1000,p=r(10,30);A('№13 · финансовая задача',`Цена ${price} руб. уменьшена на ${p}%. Определите новую цену.`,price*(1-p/100),'вариант C');}}
+  if(L===2){let v=V();if(v===1){let deposit=r(100,300)*1000,p=r(5,12);A('№13 · финансовая задача',`Вклад ${deposit} руб. увеличился на ${p}%. Какова сумма после изменения?`,deposit*(1+p/100),'вариант A');}
+   if(v===2){let deposit=r(100,300)*1000,p=r(5,12);A('№13 · финансовая задача',`Сумма ${deposit} руб. выросла на ${p}%. Найдите новую сумму.`,deposit*(1+p/100),'вариант B');}
+   if(v===3){let deposit=r(100,300)*1000,p=r(5,12);A('№13 · финансовая задача',`Величина ${deposit} руб. была увеличена на ${p}%. Определите получившееся значение.`,deposit*(1+p/100),'вариант C');}}
+  if(L===3){let v=V();if(v===1){let q=r(10,25),p=r(5,15);A('№13 · финансовая задача',`Цена товара сначала снизилась на ${q}%, затем выросла на ${p}%. Во сколько раз изменилась исходная цена?`,(1-q/100)*(1+p/100),'вариант A');}
+   if(v===2){let q=r(10,25),p=r(5,15);A('№13 · финансовая задача',`Стоимость товара уменьшилась на ${q}%, после чего увеличилась на ${p}%. Найдите отношение конечной цены к первоначальной.`,(1-q/100)*(1+p/100),'вариант B');}
+   if(v===3){let q=r(10,25),p=r(5,15);A('№13 · финансовая задача',`Сначала цену уменьшили на ${q}%, а затем повысили на ${p}%. Какой множитель показывает изменение исходной цены?`,(1-q/100)*(1+p/100),'вариант C');}}
+ }
+}
+function newP2(){
+ const n=+$('#p2num').value, L=+$('#p2level').value;
+ let title='',body='',outline='';
+ if(n===14){
+  if(L===1){title='№14 · уравнение';body='Решите уравнение 2cos x = 1 на отрезке [0; 2π].';outline='cos x=1/2. На [0;2π]: x=π/3 и x=5π/3.';}
+  else{title='№14 · уравнение';body='Решите уравнение log₂(x−1)=3.';outline='ОДЗ: x>1. По определению логарифма x−1=2³, поэтому x=9.';}
+ }
+ if(n===15){
+  if(L===1){title='№15 · стереометрия';body='В прямой призме площадь основания 12 см², высота 5 см. Найдите объём.';outline='V=Sосн·h=12·5=60 см³.';}
+  else{title='№15 · стереометрия';body='В цилиндре радиус 3 см и высота 5 см. Найдите площадь боковой поверхности.';outline='Sбок=2πrh=2π·3·5=30π см².';}
+ }
+ if(n===16){
+  if(L===1){title='№16 · неравенство';body='Решите (x−2)/(x+1) ≥ 0.';outline='ОДЗ x≠−1. По методу интервалов: (−∞;−1)∪[2;+∞).';}
+  else{title='№16 · неравенство';body='Решите log₂(x−1) ≥ 2.';outline='ОДЗ x>1. Так как основание 2>1, x−1≥4, поэтому x≥5.';}
+ }
+ if(n===17){
+  if(L===1){title='№17 · моделирование';body='Площадь прямоугольника 48 м². Выразите периметр через сторону x>0 и найдите минимум.';outline='Вторая сторона 48/x. P=2(x+48/x). Минимум достигается при x=√48=4√3; прямоугольник становится квадратом.';}
+  else{title='№17 · моделирование';body='Из квадратного листа со стороной 12 см вырезают по углам одинаковые квадраты со стороной x и загибают бортики. Выразите объём коробки через x и укажите область допустимых значений.';outline='Высота x, стороны основания 12−2x. V=x(12−2x)². Область: 0<x<6.';}
+ }
+ if(n===18){
+  if(L===1){title='№18 · планиметрия';body='В прямоугольном треугольнике катеты 6 и 8. Найдите радиус вписанной окружности.';outline='Гипотенуза 10. r=(6+8−10)/2=2.';}
+  else{title='№18 · планиметрия';body='В равнобедренном треугольнике боковые стороны 5, основание 6. Найдите площадь.';outline='Высота к основанию делит его пополам: h=√(5²−3²)=4. S=6·4/2=12.';}
+ }
+ if(n===19){
+  if(L===1){title='№19 · параметр';body='При каких a уравнение x²−2ax+a²−1=0 имеет два различных действительных корня?';outline='D=4>0 для любого a. Ответ: a∈R.';}
+  else{title='№19 · параметр';body='При каких a уравнение x²−2ax+a=0 имеет два различных положительных корня?';outline='Сумма корней 2a>0 и произведение a>0, значит a>0. D=4a(a−1)>0, значит a>1.';}
+ }
+ if(n===20){
+  if(L===1){title='№20 · теория чисел';body='Докажите, что сумма квадратов двух нечётных целых чисел не делится на 4.';outline='Каждый нечётный квадрат ≡1 (mod 4). Сумма ≡2 (mod 4), значит на 4 не делится.';}
+  else{title='№20 · теория чисел';body='Докажите, что квадрат целого числа имеет при делении на 4 остаток 0 или 1.';outline='Число имеет вид 2k или 2k+1. В первом случае квадрат 4k², во втором 4k(k+1)+1.';}
+ }
+ p2current={outline};
+ $('#p2task').innerHTML=`<span class="pill">${title}</span><div class="card" style="margin:12px 0">${body}</div>
+ <textarea id="solution" class="answer" rows="9" placeholder="Запишите полное решение: формулы, преобразования, обоснования и ответ"></textarea>
+ <button class="primary" style="margin-top:10px" onclick="showRubric()">Проверить оформление решения</button><div id="p2res"></div>`;
+}
+function showRubric(){
+ const sol=$('#solution').value.trim();
+ if(!sol){$('#p2res').innerHTML='<div class="card warn">Сначала запишите своё решение. Проверка должна оценивать именно ваш ход рассуждений.</div>';return;}
+ const n=+$('#p2num').value;
+ const common=[
+  ['Условие/модель','Записаны исходные данные и математическая модель задачи.'],
+  ['Корректность преобразований','Каждый существенный переход математически допустим.'],
+  ['Обоснование','Есть объяснение ключевых переходов, а не только вычисления.'],
+  ['Ответ','В конце явно указан ответ на вопрос задачи.']
+ ];
+ const specific={
+ 14:[['ОДЗ/допустимые значения','Указаны ограничения, если они возникают из исходного уравнения.'],['Проверка корней','Посторонние корни исключены, когда это необходимо.']],
+ 15:[['Геометрическое обоснование','Использованы свойства фигур/тел и указано, почему формула применима.'],['Размерности','Единицы измерения согласованы, если они заданы.']],
+ 16:[['ОДЗ','Отмечены точки, где выражение не определено.'],['Метод решения неравенства','Корректно учтены знаки, интервалы и точки смены знака.'],['Границы','Концы промежутков включены/исключены по знаку неравенства.']],
+ 17:[['Переменная и область','Введена переменная и указана область её допустимых значений.'],['Функция модели','Получена функция, описывающая требуемую величину.'],['Оптимальность','Минимум/максимум обоснован, а не просто найдено число.']],
+ 18:[['Геометрическая цепочка','Все используемые свойства и теоремы применены к указанным элементам фигуры.'],['Промежуточные величины','Необходимые длины/углы/площади найдены и обоснованы.']],
+ 19:[['Параметр','Разобраны значения параметра, влияющие на число/вид решений.'],['Полнота случаев','Отдельные случаи параметра не пропущены.'],['Проверка условий','Для каждого случая выполнены исходные ограничения.']],
+ 20:[['Доказательство','Использована цепочка утверждений, из которой следует требуемый вывод.'],['Общий случай','Доказательство относится ко всем допустимым значениям, а не к одному примеру.'],['Заключение','Финальный вывод явно следует из доказательства.']]
+ };
+ const rows=[...common,...(specific[n]||[])];
+ $('#p2res').innerHTML=`<div class="card"><b>Учебная самопроверка решения №${n}</b><p class="muted">Отметьте пункты, которые действительно выполнены в вашем решении. Это не автоматическая экспертная оценка и не официальный подсчёт баллов ФИПИ.</p><div id="checks">${rows.map((x,i)=>`<label style="display:block;padding:9px 0;border-bottom:1px solid var(--line)"><input type="checkbox" id="c${i}"> <b>${x[0]}</b> — ${x[1]}</label>`).join('')}</div><button class="primary" style="margin-top:12px" onclick="scoreRubric(${rows.length})">Показать разбор</button></div>`;
+ window._rubricRows=rows;
+}
+function scoreRubric(total){
+ let got=0;for(let i=0;i<total;i++)if(document.getElementById('c'+i).checked)got++;
+ const n=+$('#p2num').value;
+ let message=got===total?'Все заявленные элементы отмечены. Теперь ещё раз сверьте вычисления с эталонной логикой.':got>=Math.ceil(total*.7)?'Основная структура решения отмечена, но есть пункты, которые стоит дописать или проверить.':'В решении пока не хватает нескольких важных элементов. Сначала исправьте структуру, затем повторите задачу.';
+ $('#p2res').insertAdjacentHTML('beforeend',`<div class="card ${got===total?'success':'warn'}"><b>Результат самопроверки: ${got} из ${total}</b><p>${message}</p><h3>Эталонная логика</h3><pre>${p2current.outline}</pre><p class="small muted">Для реальной экзаменационной проверки решение должен оценивать человек по действующим на соответствующий год критериям ФИПИ.</p></div>`);
+}
+newTask();newP2();renderAdaptive();loadExam();
+</script>
+</body></html>
