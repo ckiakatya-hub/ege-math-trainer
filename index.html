@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Мой ЕГЭ — Профильная математика</title>
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--text:#172033;--muted:#667085;--accent:#315efb;--line:#e4e7ec;--good:#087443;--bad:#b42318}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+.wrap{max-width:850px;margin:auto;padding:24px 16px 48px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;margin:14px 0}
+h1,h2,h3{margin-top:0}.muted{color:var(--muted)}button,select,input,textarea{font:inherit}button{border:0;border-radius:12px;padding:12px 16px;cursor:pointer;background:#eef2ff;color:#243b8f;min-height:44px}
+button.primary{background:var(--accent);color:white}.buttons{display:flex;gap:10px;flex-wrap:wrap}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}@media(max-width:600px){.grid{grid-template-columns:1fr}}
+select,input,textarea{width:100%;border:1px solid var(--line);border-radius:12px;padding:12px;background:white;color:var(--text)}
+.q{font-size:1.08rem;line-height:1.65;margin:20px 0}.options{display:grid;gap:10px}.option{text-align:left;background:white;border:1px solid var(--line);color:var(--text)}.option.selected{outline:2px solid var(--accent)}
+.feedback{padding:14px;border-radius:12px;margin-top:14px;background:#f8fafc;border:1px solid var(--line)}.good{border-color:#a6f4c5;background:#ecfdf3}.bad{border-color:#fecdca;background:#fef3f2}
+.top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.pill{display:inline-block;background:#eef2ff;color:#3346a8;border-radius:99px;padding:5px 9px;font-size:.85rem;margin-right:5px}
+.row{padding:11px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px}.bar{height:8px;background:#eaecf0;border-radius:9px;overflow:hidden;margin:4px 0 12px}.fill{height:100%;background:var(--accent)}
+.small{font-size:.9rem}.hidden{display:none!important}.timer{font-weight:700;font-variant-numeric:tabular-nums}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="card">
+<h1>Мой ЕГЭ — профильная математика</h1>
+<p class="muted">11 класс · тренировка · диагностика · экзаменационный режим · анализ ошибок</p>
+</header>
+
+<section id="home" class="card">
+<h2>Начать</h2>
+<div class="grid">
+<label>Режим<select id="mode"><option value="train">Тренировка — сразу видеть разбор</option><option value="exam">Экзамен — проверка в конце</option></select></label>
+<label>Блок<select id="block"><option value="all">Весь вариант · №1–19</option><option value="p1">Часть 1 · №1–12</option><option value="p2">Часть 2 · №13–19</option></select></label>
+</div>
+<div class="buttons" style="margin-top:16px">
+<button class="primary" id="start">Начать вариант</button>
+<button id="diagnostic">Диагностика</button>
+<button id="progress">Мой прогресс</button>
+</div>
+<p class="muted small">Задания в этой первой самостоятельной версии авторские и не являются официальным вариантом ФИПИ.</p>
+</section>
+
+<section id="quiz" class="card hidden">
+<div class="top"><div>Задание <b id="qnum"></b> / <b id="qtotal"></b></div><div><span id="timer" class="timer"></span> &nbsp; ✓ <b id="score">0</b></div></div>
+<div style="margin-top:12px"><span class="pill" id="qtag"></span><span class="muted small" id="qpart"></span></div>
+<div class="q" id="question"></div>
+<div id="answer"></div>
+<div class="buttons" style="margin-top:16px"><button class="primary" id="check">Проверить</button><button id="next" class="hidden">Следующее</button><button id="finish" class="hidden">Завершить</button></div>
+<div id="feedback" aria-live="polite"></div>
+</section>
+
+<section id="result" class="card hidden">
+<h2>Результат</h2><div style="font-size:2rem;font-weight:700" id="resultScore"></div>
+<p class="muted" id="resultText"></p><div id="resultDetails"></div>
+<div class="buttons" style="margin-top:16px"><button class="primary" id="retry">Пройти ещё раз</button><button id="homeBtn">На главную</button></div>
+</section>
+
+<section id="progressPage" class="card hidden">
+<h2>Мой прогресс</h2><div id="progressData"></div>
+<button id="back" style="margin-top:16px">Назад</button>
+</section>
+</div>
+
+<script>
+const BANK=[
+{n:1,tag:"Алгебра",topic:"algebra",part:1,q:"Вычислите: 3/5 + 7/10.",a:["1","13/10","17/10","2"],c:1,e:"3/5 = 6/10, поэтому 6/10 + 7/10 = 13/10."},
+{n:2,tag:"Степени",topic:"algebra",part:1,q:"Найдите значение выражения: 2^7 / 2^4.",a:["2","4","8","16"],c:2,e:"2^(7−4)=2³=8."},
+{n:3,tag:"Уравнения",topic:"equations",part:1,q:"Решите уравнение: 5x − 13 = 22.",a:["5","6","7","8"],c:2,e:"5x=35, поэтому x=7."},
+{n:4,tag:"Вероятность",topic:"prob",part:1,q:"Вероятность события равна 0,65. Найдите вероятность противоположного события.",a:["0,25","0,35","0,45","0,65"],c:1,e:"1−0,65=0,35."},
+{n:5,tag:"Функции",topic:"functions",part:1,q:"Найдите наименьшее значение f(x)=x²−8x+19.",a:["2","3","4","5"],c:1,e:"f(x)=(x−4)²+3. Минимум равен 3."},
+{n:6,tag:"Неравенства",topic:"equations",part:1,q:"Решите неравенство: (x−2)(x−5)≤0.",a:["x≤2","2≤x≤5","x≥5","x<2 или x>5"],c:1,e:"Произведение неположительно между корнями: [2;5]."},
+{n:7,tag:"Планиметрия",topic:"geometry",part:1,q:"Катеты прямоугольного треугольника равны 9 и 12. Найдите гипотенузу.",a:["13","15","17","21"],c:1,e:"√(9²+12²)=15."},
+{n:8,tag:"Планиметрия",topic:"geometry",part:1,q:"Найдите площадь круга радиуса 5.",a:["5π","10π","25π","50π"],c:2,e:"S=πr²=25π."},
+{n:9,tag:"Логарифмы",topic:"equations",part:1,q:"Решите уравнение log₂(x)=6.",a:["12","32","64","128"],c:2,e:"x=2⁶=64."},
+{n:10,tag:"Производная",topic:"functions",part:1,q:"Найдите производную f(x)=x⁴−3x²+1.",a:["4x³−6x","4x³−3x","x³−6x","4x²−6"],c:0,e:"f′(x)=4x³−6x."},
+{n:11,tag:"Производная",topic:"functions",part:1,q:"Тело движется по закону s(t)=t²+6t. Найдите скорость в момент t=4.",a:["10","12","14","16"],c:2,e:"v(t)=s′(t)=2t+6; v(4)=14."},
+{n:12,tag:"Тригонометрия",topic:"trig",part:1,q:"Найдите sin(π/6)+cos(π/3).",a:["0","1/2","1","√3/2"],c:2,e:"1/2+1/2=1."},
+{n:13,tag:"Квадратное уравнение",topic:"equations",part:2,q:"Решите уравнение: x²−7x+12=0. Введите корни через пробел.",input:"3 4",e:"x²−7x+12=(x−3)(x−4). Корни: 3 и 4."},
+{n:14,tag:"Стереометрия",topic:"stereo",part:2,q:"Основание прямой призмы — прямоугольник со сторонами 3 и 4. Высота призмы 10. Найдите объём.",input:"120",e:"V=Sосн·h=(3·4)·10=120."},
+{n:15,tag:"Показательное уравнение",topic:"equations",part:2,q:"Решите уравнение: 3^(x+1)=81. Введите x.",input:"3",e:"81=3⁴, значит x+1=4 и x=3."},
+{n:16,tag:"Планиметрия",topic:"geometry",part:2,q:"В равнобедренном треугольнике боковые стороны 13, основание 10. Найдите высоту к основанию.",input:"12",e:"Высота делит основание пополам: h=√(13²−5²)=12."},
+{n:17,tag:"Оптимизация",topic:"algebra",part:2,q:"Найдите наименьшее значение x+16/x при x>0.",input:"8",e:"x+16/x≥2√16=8. Равенство при x=4."},
+{n:18,tag:"Экономика",topic:"economy",part:2,q:"После повышения цены на 20% товар стал стоить 3600 рублей. Сколько он стоил первоначально?",input:"3000",e:"1,2x=3600, поэтому x=3000."},
+{n:19,tag:"Планиметрия",topic:"geometry",part:2,q:"Площадь параллелограмма со сторонами 8 и 6 и углом 30° между ними. Введите число.",input:"24",e:"S=ab·sin30°=8·6·1/2=24."}
+];
+
+const names={algebra:"Алгебра",equations:"Уравнения и неравенства",functions:"Функции и производная",prob:"Вероятность",geometry:"Планиметрия",stereo:"Стереометрия",economy:"Экономика",trig:"Тригонометрия"};
+let list=[],idx=0,score=0,mode="train",mistakes=[],timerId=null,seconds=14100,session={};
+
+const $=id=>document.getElementById(id);
+function show(id){["home","quiz","result","progressPage"].forEach(x=>$(x).classList.toggle("hidden",x!==id))}
+function fmt(s){let h=Math.floor(s/3600),m=Math.floor(s%3600/60),z=s%60;return h+":"+String(m).padStart(2,"0")+":"+String(z).padStart(2,"0")}
+function normalize(s){return s.trim().replace(",",".").replace(/\s+/g," ")}
+function start(custom=null){
+  mode=$("mode").value; let b=$("block").value;
+  list=custom||BANK.filter(q=>b==="all"||(b==="p1"&&q.part===1)||(b==="p2"&&q.part===2));
+  idx=0;score=0;mistakes=[];seconds=14100;
+  session={date:new Date().toISOString(),mode,answered:0,correct:0,byTopic:{}};
+  if(timerId)clearInterval(timerId); $("timer").textContent=mode==="exam"?fmt(seconds):"";
+  if(mode==="exam")timerId=setInterval(()=>{seconds--; $("timer").textContent=fmt(seconds); if(seconds<=0)finish()},1000);
+  show("quiz");render();
+}
+function render(){
+  const q=list[idx]; $("qnum").textContent=q.n;$("qtotal").textContent=list.length;$("score").textContent=score;
+  $("qtag").textContent=q.tag;$("qpart").textContent=q.part===1?"Часть 1 · краткий ответ":"Часть 2 · ответ";
+  $("question").textContent=q.q;$("feedback").innerHTML="";$("check").classList.remove("hidden");$("next").classList.add("hidden");$("finish").classList.add("hidden");
+  if(q.part===1){
+    $("answer").innerHTML='<div class="options">'+q.a.map((x,k)=>`<button class="option" data-k="${k}">${String.fromCharCode(65+k)}. ${x}</button>`).join("")+"</div>";
+    document.querySelectorAll("#answer .option").forEach(b=>b.onclick=()=>{document.querySelectorAll("#answer .option").forEach(x=>x.classList.remove("selected"));b.classList.add("selected")});
+  }else $("answer").innerHTML='<input id="numeric" inputmode="decimal" placeholder="Введите ответ">';
+}
+function check(){
+  const q=list[idx];let ok=false;
+  if(q.part===1){const b=document.querySelector("#answer .selected");if(!b){$("feedback").innerHTML='<div class="feedback bad">Выберите ответ.</div>';return}ok=Number(b.dataset.k)===q.c}
+  else{const v=normalize($("numeric").value);if(!v){$("feedback").innerHTML='<div class="feedback bad">Введите ответ.</div>';return}ok=v===q.input}
+  session.answered++;session.correct+=ok?1:0;session.byTopic[q.topic]=(session.byTopic[q.topic]||{right:0,total:0});session.byTopic[q.topic].total++;if(ok)session.byTopic[q.topic].right++;else mistakes.push(q);
+  if(ok)score++;$("score").textContent=score;$("check").classList.add("hidden");
+  if(mode==="train")$("feedback").innerHTML=`<div class="feedback ${ok?"good":"bad"}"><b>${ok?"Верно!":"Неверно."}</b><br>${q.e}</div>`;
+  else $("feedback").innerHTML='<div class="feedback">Ответ сохранён.</div>';
+  if(idx<list.length-1)$("next").classList.remove("hidden");else $("finish").classList.remove("hidden");
+}
+function finish(){
+  if(timerId){clearInterval(timerId);timerId=null}
+  saveSession();show("result");
+  $("resultScore").textContent=`${score} из ${list.length}`;
+  $("resultText").textContent=`Правильных ответов: ${Math.round(score/list.length*100)}%.`;
+  let html="<h3>Ошибки по темам</h3>";
+  Object.entries(session.byTopic).forEach(([k,v])=>{let p=Math.round(v.right/v.total*100);html+=`<div class="row"><span>${names[k]}</span><b>${p}%</b></div><div class="bar"><div class="fill" style="width:${p}%"></div></div>`});
+  if(mistakes.length)html+=`<p><b>Ошибок: ${mistakes.length}</b></p><p class="muted">Можно повторить именно эти задания в следующей версии приложения.</p>`;else html+='<div class="feedback good">Ошибок в этом варианте нет.</div>';
+  $("resultDetails").innerHTML=html;
+}
+function saveSession(){let arr=JSON.parse(localStorage.getItem("egeSessions")||"[]");arr.push(session);localStorage.setItem("egeSessions",JSON.stringify(arr.slice(-20)))}
+function showProgress(){
+  show("progressPage");let arr=JSON.parse(localStorage.getItem("egeSessions")||"[]");
+  if(!arr.length){$("progressData").innerHTML='<p class="muted">Пока нет завершённых тренировок.</p>';return}
+  let total=arr.reduce((s,x)=>s+x.answered,0),correct=arr.reduce((s,x)=>s+x.correct,0);
+  let topic={};arr.forEach(x=>Object.entries(x.byTopic||{}).forEach(([k,v])=>{topic[k]=topic[k]||{r:0,t:0};topic[k].r+=v.right;topic[k].t+=v.total}));
+  let html=`<div class="feedback"><b>Попыток:</b> ${arr.length}<br><b>Решено заданий:</b> ${total}<br><b>Правильных:</b> ${correct} (${total?Math.round(correct/total*100):0}%)</div><h3 style="margin-top:20px">Темы</h3>`;
+  Object.entries(topic).forEach(([k,v])=>{let p=Math.round(v.r/v.t*100);html+=`<div class="row"><span>${names[k]}</span><b>${p}%</b></div><div class="bar"><div class="fill" style="width:${p}%"></div></div>`});
+  $("progressData").innerHTML=html;
+}
+$("start").onclick=()=>start();$("diagnostic").onclick=()=>{const copy=[...BANK.slice(0,12)];$("mode").value="train";$("block").value="all";start(copy)};
+$("progress").onclick=showProgress;$("next").onclick=()=>{idx++;render()};$("check").onclick=check;$("finish").onclick=finish;
+$("retry").onclick=()=>show("home");$("homeBtn").onclick=()=>show("home");$("back").onclick=()=>show("home");
+</script>
+</body>
+</html>
